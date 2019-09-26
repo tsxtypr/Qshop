@@ -1,0 +1,67 @@
+{% extends 'saller/base.html' %}
+
+{% block  title%}
+    商品信息
+{% endblock %}
+
+{% block label %}
+    商品信息
+    <a href="/Saller/add_data/">增加信息</a>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>商品编号</th>
+                <th>商品名称</th>
+                <th>商品价格</th>
+                <th>商品数量</th>
+                <th>商品产地</th>
+                <th>商品保质期</th>
+                <th>生产日期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for one in page_obj %}
+            <tr>
+                <th>{{ one.number }}</th>
+                <th>{{ one.name }}</th>
+                <th>{{ one.price }}</th>
+                <th>{{ one.count }}</th>
+                <th>{{ one.location }}</th>
+                <th>{{ one.safe_time }}</th>
+                <th>{{ one.pro_time }}</th>
+                <th>
+                    <a href="">
+                        <button class="btn btn-primary">修改</button>
+                    </a>
+                    {% if one.type == 1 %}
+                        <a href="/Saller/setstatus/down/{{ one.id }}/">
+                            <button class="btn btn-warning">下架</button>
+                        </a>
+                    {% else %}
+                        <a href="/Saller/setstatus/up/{{ one.id }}/">
+                            <button class="btn btn-warning">上架</button>
+                        </a>
+
+                    {% endif %}
+                </th>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <div style="float: right;margin-right: 70px">
+        <ul class="pagination">
+        {% for page in paginator.page_range %}
+            <li class="paginate_button page-item previous" >
+                <a href="/Saller/goods_list/{{ type }}/{{ page }}/" class="page-link">{{ page }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

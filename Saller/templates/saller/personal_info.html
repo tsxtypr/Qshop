@@ -1,0 +1,43 @@
+{% extends 'saller/base.html' %}
+
+{% block title %}
+    个人中心
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table">
+        <tr>
+            <td rowspan="3" style="width:280px;height: 400px">
+                <img  style="width:280px;height: 400px" src="/static/saller/{{ user.photo }}/" alt="">
+                <div><input type="file" name="photo"></div>
+            </td>
+            <td>用户名</td>
+            <td><input type="text" name="username" value="{{ user.username }}"></td>
+            <td>邮箱</td>
+            <td><input type="text" name="email" value="{{ user.email }}"></td>
+
+        </tr>
+        <tr>
+            <td>电话号码</td>
+            <td><input type="text" name="phone_number" value="{{ user.phone_number }}"></td>
+
+            <td>年龄</td>
+            <td><input type="text" name="age" value="{{ user.age }}"></td>
+
+        </tr>
+        <tr>
+            <td>性别</td>
+            <td><input type="text" name="gender" value="{{ user.gender }}"></td>
+
+            <td>地址</td>
+            <td><input type="text" name="address" value="{{ user.address }}"></td>
+
+        </tr>
+        <tr>
+            <td  colspan="5" style="text-align: center"><input type="submit" class="btn btn-primary" value="完善用户"></td>
+        </tr>
+    </table>
+    </form>
+{% endblock %}
