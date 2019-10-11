@@ -30,6 +30,8 @@ urlpatterns = [
     re_path('setstatus/(?P<status>\w+)/(?P<id>\d+)/', views.setstatus),
     path('personal_info/', views.personal_info),
     path('add_data/', views.add_data),
+    path('update_data/', views.update_data),
+    re_path('order_info/(?P<status>\d+)/', views.order_info),
 
 ]
 

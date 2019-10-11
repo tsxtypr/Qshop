@@ -3,6 +3,7 @@ from .models import *
 from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 import hashlib
 from django.core.paginator import Paginator
+from Buyer.models import *
 import random
 
 # Create your views here.
@@ -159,6 +160,8 @@ def add_data(request):
         goods.safe_time=data.get('safe_time')
         goods.picture=request.FILES.get('picture')
         goods.save()
+        # 对于一对多、多对多
+        # 先从前端拿到数据，在从关联表中查询对象并赋值
         goods_type=request.POST.get('goods_type')
         goods.goods_type=GoodsType.objects.get(id=goods_type)
         userid=request.COOKIES.get('userid')
@@ -168,3 +171,41 @@ def add_data(request):
 
     return render(request,'saller/add_data.html',locals())
 
+
+# 使用邮件发送验证码
+# import smtplib
+# from email.mime.text import MIMEText
+# def send_email(params):
+#     """
+#     :param params:
+#         subject:主题
+#         content:邮件内容
+#         toemail 收件人 列表
+#     :return:
+#     """
+
+# 订单信息
+def order_info(request,status):
+    status=int(status)
+    print(status)
+    user_id=request.COOKIES.get('id')
+    user = LoginUser.objects.get(id=user_id)
+    orderinfo=user.orderinfo_set.filter(store_id=user,orderinfo_status=status)
+
+    return render(request,'saller/order_info.html',locals())
+
+def update_data(request):
+    data=request.GET
+    goods=Goods.objects.get(id=int(data.get("goods_id")))
+    # print(goods)
+
+    data=request.POST
+    if data:
+        goods.number=data.get("number")
+        goods.name=data.get("name")
+        goods.price=float(data.get("price"))
+        goods.count=int(data.get("count"))
+        goods.safe_time=int(data.get("safe_time"))
+        goods.save()
+
+    return render(request,'saller/update_data.html',locals())

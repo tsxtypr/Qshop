@@ -67,7 +67,7 @@
 					<div class="operate">
 						<span class="prize">￥{{ one.price }}</span>
 						<span class="unit">16.80/500g</span>
-						<a href="#" class="add_goods" title="加入购物车"></a>
+						<a  id="{{ one.id }}" href="#" class="add_goods" title="加入购物车" onclick="get_cart(this)"></a>
 					</div>
 				</li>
                 {% endfor %}
@@ -75,19 +75,47 @@
 			</ul>
 
 			<div class="pagenation">
+                <a href="/Buyer/goods_list/1/?keyword={{ type.id }}&req_type={{ request.GET.req_type }}">首页</a>
             {% if page_obj.has_previous %}
-				<a href="/Buyer/goods_list/{{ page_obj.previous_page_number }}/?keyword={{ type.id }}">上一页</a>
+				<a href="/Buyer/goods_list/{{ page_obj.previous_page_number }}/?keyword={{ type.id }}&req_type={{ request.GET.req_type }}">上一页</a>
             {% endif %}
                 {% for page in paginator.page_range %}
-				<a href="/Buyer/goods_list/{{ page }}/?keyword={{ type.id }}">{{ page }}</a>
+				<a href="/Buyer/goods_list/{{ page }}/?keyword={{ type.id }}&req_type={{ request.GET.req_type }}">{{ page }}</a>
                 {% endfor %}
             {% if page_obj.has_next %}
-				<a href="/Buyer/goods_list/{{ page_obj.next_page_number }}/?keyword={{ type.id }}">下一页></a>
+				<a href="/Buyer/goods_list/{{ page_obj.next_page_number }}/?keyword={{ type.id }}&req_type={{ request.GET.req_type }}">下一页</a>
             {% endif %}
+                <a href="/Buyer/goods_list/{{ paginator.num_pages }}/?keyword={{ type.id }}&req_type={{ request.GET.req_type }}">尾页</a>
 			</div>
 		</div>
 	</div>
     {% else %}
         <h2 style="text-align: center;font-size: 24px;">抱歉，您找的商品不存在.....</h2>
     {% endif %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        function get_cart(obj) {
+            goods_id=obj.id
+            url='/Buyer/add_cart/'
+            send_data={
+                "goods_id":goods_id,
+                "csrfmiddlewaretoken":"{{ csrf_token }}"
+            }
+            $.ajax(
+                {
+                    url:url,
+                    type:'post',
+                    data:send_data,
+                    success:function (data) {
+                        console.log(data)
+                    },
+                    error:function (error) {
+                        console.log(error)
+                    }
+                }
+            )
+        }
+    </script>
 {% endblock %}

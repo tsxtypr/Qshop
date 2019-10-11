@@ -10,7 +10,7 @@
 	<div class="common_list_con clearfix">
 		<dl>
 			<dt>寄送到：</dt>
-			<dd><input type="radio" name="" checked="">北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>
+			<dd><input type="radio" name="" checked="">{{ addre_obj.detail_addr }}({{ addre_obj.username }}收) {{ addre_obj.phone }}</dd>
 		</dl>
 		<a href="user_center_site.html" class="edit_site">编辑收货地址</a>
 
@@ -40,8 +40,9 @@
 			<li class="col04">数量</li>
 			<li class="col05">小计</li>
 		</ul>
+        {% for orderinfo in  payorder.orderinfo_set.all %}
 		<ul class="goods_list_td clearfix">
-			<li class="col01">{{ good_id }}</li>
+			<li class="col01">{{ goods_id }}</li>
 			<li class="col02"><img src="/static/buyer/{{ orderinfo.good_id.picture }}"></li>
 			<li class="col03">{{ orderinfo.good_id.name }}</li>
 			<li class="col04">500g</li>
@@ -49,6 +50,7 @@
 			<li class="col06">{{ orderinfo.goods_count }}</li>
 			<li class="col07">{{ orderinfo.goods_tatol_price }}元</li>
 		</ul>
+    {% endfor %}
 	</div>
 
 	<h3 class="common_title">总金额结算</h3>

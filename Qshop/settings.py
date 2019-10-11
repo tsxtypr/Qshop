@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Buyer',
     'Saller',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'Qshop.middlewaretest.MiddlewareTest',
 ]
 
 ROOT_URLCONF = 'Qshop.urls'
@@ -79,9 +81,53 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    },
+    # 配置从服务器
+    # 'slave': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db2.sqlite3'),
+    # }
 }
 
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'qshop',
+#         'USER': 'root',
+#         'PASSWORD': '123456',
+#         'HOST': '10.10.107.154',
+#         'PORT': '3306',
+#     },
+#     'slave': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'qshop2',
+#         'USER': 'root',
+#         'PASSWORD': '123456',
+#         'HOST': '10.10.107.57',
+#         'PORT': '3306',
+#     }
+# }
+
+# logging日志的配置
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR,'debug.log'),
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -130,6 +176,7 @@ STATICFILES_DIRS=(
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'static')
 
+
 # 公钥
 alipay_public_key_string = """-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA9O64pwEwQQf6wut37u3YjkDsnpTc9SNXRIv1nBP6jWgdd2y5Fr3cY9+qpe2jhSdag1juYsOgjhkQZjTHD5kdrAk2ZoZWPY14YukTLi1HmvduwOOpXCc1ZRgFOnPjHH8PP5t9lDxZar1/9n7R1Z71mjzEyU02FraQg5uKRaCaRLeq01ksoOJOCe5jOlvGBILWnNCuv16EOyCqWbspr2Tg/beBFP1Tzopo/XZg7yNBCl9iMmUwFTqeoY0/7/sxCkO1TMp036tXr6uDFyqi/nWw05uHvkI1RXSV+mYfmrjQ+EPLcsmPY/dj0TcXi1IDAHIKr6yE6r/ZdPhjEZqEcDXZnQIDAQAB
@@ -139,3 +186,37 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA9O64pwEwQQf6wut37u3YjkDsnpTc9SNXRIv1
 alipay_private_key_string = """-----BEGIN RSA PRIVATE KEY-----
 MIIEpQIBAAKCAQEA9O64pwEwQQf6wut37u3YjkDsnpTc9SNXRIv1nBP6jWgdd2y5Fr3cY9+qpe2jhSdag1juYsOgjhkQZjTHD5kdrAk2ZoZWPY14YukTLi1HmvduwOOpXCc1ZRgFOnPjHH8PP5t9lDxZar1/9n7R1Z71mjzEyU02FraQg5uKRaCaRLeq01ksoOJOCe5jOlvGBILWnNCuv16EOyCqWbspr2Tg/beBFP1Tzopo/XZg7yNBCl9iMmUwFTqeoY0/7/sxCkO1TMp036tXr6uDFyqi/nWw05uHvkI1RXSV+mYfmrjQ+EPLcsmPY/dj0TcXi1IDAHIKr6yE6r/ZdPhjEZqEcDXZnQIDAQABAoIBAQCzYy/saMttpal8HzdMz/heX6CtmLun8sVUl+k/8cX80Tdbo06AIHgM0eDK/BxaRnNdZcHapgquaB8BrD/q5aq8uFaWimcZV8bHMotws4sRLY15SoRc0P6jVw9lO0EoOsrxPDGiYvzeV4IkB8gpW+3nlABQqvMleXqoWT/RNQonrqpnqmOp4as41iL9c/7J7znzxBeBZkDGEwrCx/85muXHjkDI/sjCYfkVx1uyQ9LBaBtpoTxnDUXQRdhI+RmpCilqgQi0Rbt9b3np9KmlfNVldK8sd0LRygki3g1zNnMK+IaNSMgBLlvbIgzuvtw6sNpM/RUjUQx80tHrYDhJu/tBAoGBAPytxYsWXg55UVW6LSgb2SrwZaQ0+qilFv8wnrS338wwTt6tM8scCwDQkvdfR5D7THhvsUBrJ0O5p8l6FFXSrRmo3966YNpNNBoHp20pfscirXo1tlSc7QHdfAWzReIgRvyh+VQAaE0yDbL7H6c1Rv7MKDhW0EN+2WyYMNiejEoRAoGBAPgm4mzyUHcgQzeVclWTuOXvpAA71yOk/mUCv72CWUftJducUZHzLCY9QnfBmbUj8yBze1UJHS4WBDZf9pjmfSjghJPztX2Y2gzzH/e5HxGojlMpI7FKrt7Vw+rYf/YS2CoRDDHBxFe1XYWFC6t+YdIqbEK4M8p5pbrJYbcoe+rNAoGARVVtcjfmATS647odb/cMRSMH0OIUsbfzMnzl35Lg3weWbLW8E4yTXFrfKO/FFHxQRG/phFKiyIumBbvw3ofbpcHYBCbCMsSiek4FXAfZ2MykK3eXm2ogArYCtRG3KFBRCjtrzef6tsv4RFdyHRCadYoRszvnE8433Pt508bVmfECgYEAyAmgcS6MitspFD+WoUGpxUF+tOmILiWtJQQoSL4w9nhHEldasgqSxmiPkjYwkALg1IIDI7NrIGGDF8oX4X272x3SAeptnUeATvwWAv3p+7QitwrsyNhpSxyLCF9qF5VtR8viRqHqgsGjGCT+GUqR1Hd6OfZ/WXLilEYOTTWHXukCgYEAtbaoOez4Y4SRifDkOgVy7J61JSSaQ6lCOLcUgDrUxUY7DCjCc6hPFb7v6rpwcDUIRL1TWC84lqipjgkUbVvfyVedzAEhY3J99VwDyt4pxirGhvI0oZ6bNmYU5wbQ4d+sFlmzb06OiQ8c9pe6y/VJNgvykBySddZ/UnlL6s5l3WM=
 -----END RSA PRIVATE KEY-----"""
+
+# import djcelery
+# djcelery.setup_loader()  #进行模块载入
+# BROKER_URL='redis://127.0.0.1:6379/1'  #中间件  第二个数据库
+# BACKEND_URL='redis://127.0.0.1:6379/2'  #存结果的
+# CELERY_IMPORTS=('CeleryTask.tasks') #具体的任务文件
+# CELERY_TIMEZONE='UTC'   #celery时区  与django的一致
+# CELERYBEAT_SCHEDULER='djcelery.schedulers.DatabaseScheduler'  #django的处理器，固定的
+#
+# from celery.schedules import timedelta,crontab
+# #
+# CELERYBEAT_SCHEDULE={
+#     u'测试任务':{
+#         'task':'CeleryTask.tasks.test', #任务函数
+#         # 'task':'CeleryTask.tasks.myprint', #任务函数
+#         'schedule':timedelta(seconds=1)  #时间，每隔1s执行一次
+#
+#     }
+# }
+
+#
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION':[
+#             '127.0.0.1:11211'  #本机memcached地址
+#         ]
+#     }
+# }
+# CACHE_MIDDLEWARE_KEY_PREFIX = ''
+# CACHE_MIDDLEWARE_SECONDS = 600
+# CACHE_MIDDLEWARE_ALIAS = 'default'
+
+# DATABASE_ROUTERS=["mydbrouter.Router"]

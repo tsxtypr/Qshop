@@ -36,20 +36,33 @@
               </div>
               <form class="user" method="post">
                   {% csrf_token %}
+{#                  用户名#}
                 <div class="form-group row">
                   <div class="col-sm-12 mb-3 mb-sm-0">
                     <input type="text" class="form-control form-control-user" name="username" id="exampleFirstName" placeholder="用户名">
                   </div>
                 </div>
+{#                  邮箱#}
                 <div class="form-group">
                   <input type="email" class="form-control form-control-user" name="email" id="exampleInputEmail" placeholder="邮箱">
                 </div>
+{#                  密码#}
                 <div class="form-group row">
                   <div class="col-sm-12 mb-3 mb-sm-0">
                     <input type="password" class="form-control form-control-user" name="password" id="exampleInputPassword" placeholder="密码">
                   </div>
-
                 </div>
+{#                  验证码#}
+{#                <div class="form-group row">#}
+{#                  <div class="col-sm-6 mb-3 mb-sm-0">#}
+{#                    <input type="text" name="valid_code" class="form-control form-control-user" id="valid_code" placeholder="验证码">#}
+{#                  </div>#}
+{#                  <div class="col-sm-6 mb-3 mb-sm-0">#}
+{#                    <input type="button" class="btn btn-warning" id="button" value="获取验证码">#}
+{#                  </div>#}
+{#                </div>#}
+
+
                   <input type="submit" value="登录用户" class="btn btn-primary btn-user btn-block">
 {#                <a href="login.html" class="btn btn-primary btn-user btn-block">#}
 {#                  登录用户#}

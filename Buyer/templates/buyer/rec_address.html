@@ -1,0 +1,84 @@
+{% extends 'buyer/base.html' %}
+
+{% block title %}
+    收货地址
+{% endblock %}
+
+{% block content %}
+    	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="/Buyer/user_center_info/">· 个人信息</a></li>
+				<li><a href="/Buyer/allorder/">· 全部订单</a></li>
+				<li><a href="/Buyer/rec_address/" class="active">· 收货地址</a></li>
+			</ul>
+		</div>
+		<div class="right_content clearfix">
+				<h3 class="common_title2">收货地址</h3>
+				<div class="site_con">
+					<dl>
+						<dt>当前地址：</dt>
+                    <div style="padding-left: 100px;">
+                        <select name="now_address" id="">
+                            {% for one in addresses %}
+                                {% if one.address_status == 1 %}
+                                    <option value="{{ one.id }}" class="each_address" selected>{{ one.detail_addr }} ({{ one.username }}收) {{ one.phone }} </option>
+                                {% endif %}
+                            <option value="{{ one.id }}" class="each_address">{{ one.detail_addr }} ({{ one.username }}收) {{ one.phone }} </option>
+                            {% endfor %}
+                        </select>
+                    <button id="sure" onclick="getdata(this)">确定</button>
+                    </div>
+{#						<dd>北京市 海淀区 东北旺西路8号中关村软件园 （李思 收） 182****7528</dd>#}
+					</dl>
+				</div>
+				<h3 class="common_title2">编辑地址</h3>
+				<div class="site_con">
+					<form method="post">
+                        {% csrf_token %}
+						<div class="form_group">
+							<label>收件人：</label>
+							<input type="text" name="username">
+						</div>
+						<div class="form_group form_group2">
+							<label>详细地址：</label>
+							<textarea class="site_area" name="detail_addr"></textarea>
+						</div>
+						<div class="form_group">
+							<label>邮编：</label>
+							<input type="text" name="u_code">
+						</div>
+						<div class="form_group">
+							<label>手机：</label>
+							<input type="text" name="phone">
+						</div>
+						<input type="submit" name="" value="提交" class="info_submit">
+					</form>
+				</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+    <script>
+    function getdata(obj) {
+        address_id=$(obj).siblings("select").val()
+        console.log(address_id)
+        url='/Buyer/rec_address/?address_id='+address_id
+        $.ajax({
+            url:url,
+            data:"",
+            type:'get',
+            success:function (data) {
+                console.log(data)
+            },
+            error:function (err) {
+                console.log(err)
+            }
+        })
+
+    }
+
+    </script>
+{% endblock %}

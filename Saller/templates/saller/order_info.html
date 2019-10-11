@@ -1,0 +1,62 @@
+{% extends 'saller/base.html' %}
+
+{% block  title%}
+    商品信息
+{% endblock %}
+
+{% block label %}
+    商品信息
+    <a href="/Saller/add_data/">增加信息</a>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>订单编号</th>
+                <th>总价</th>
+                <th>地址</th>
+                <th>收件人</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for order in orderinfo %}
+            <tr>
+                <th>{{ order.order_id.order_number }}</th>
+                <th>{{ order.order_id.order_total }}</th>
+                <th>{% for address_obj in order.order_id.order_user.recaddress_set.all %}
+                    {% if address_obj.address_status == 1 %}
+                        {{ address_obj.detail_addr }}
+                    {% endif %}
+                {% endfor %}</th>
+                <th>{{ order.order_id.order_user.username }}</th>
+                <th>
+                    {% if order.orderinfo_status == 0 %}
+                        <button class="btn btn-primary">提醒支付</button>
+                        <button class="btn btn-warning">拒绝订单</button>
+                    {% elif order.orderinfo_status == 1 %}
+                        <button class="btn btn-primary">立即发货</button>
+                    {% elif order.orderinfo_status == 3 %}
+                        <button class="btn btn-primary">查看物流</button>
+                    {% elif order.orderinfo_status == 4 %}
+                        <button class="btn btn-primary">查看订单详情</button>
+                    {% endif %}
+                </th>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <div style="float: right;margin-right: 70px">
+        <ul class="pagination">
+        {% for page in paginator.page_range %}
+            <li class="paginate_button page-item previous" >
+                <a href="/Saller/goods_list/{{ type }}/{{ page }}/" class="page-link">{{ page }}</a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

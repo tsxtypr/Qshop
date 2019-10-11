@@ -14,4 +14,11 @@ urlpatterns = [
     path('pay/',views.pay),
     path('alipayviews/',views.AlipayViews),
     path('payresult/',views.payresult),
+    path('add_cart/',views.add_cart),
+    path('cart/',views.cart),
+    path('allorder/',views.allorder),
+    path('paymore/',views.paymore),
+    path('reqtest/',views.reqtest),
+    path('cache_test/',views.cache_test),
+    path('rec_address/',views.rec_address),
 ]

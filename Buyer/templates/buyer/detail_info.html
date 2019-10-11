@@ -62,10 +62,11 @@
 			<div class="total">总价：<em id="total">{{ goods.price  }}</em>元</div>
 			<div class="operate_btn">
 				<a id="buynow" href="javascript:;" class="buy_btn">立即购买</a>
-				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>
+				<a href="/Buyer/cart/" class="add_cart" id="{{ goods.id }}" onclick="get_cart(this)">加入购物车</a>
 			</div>
 		</div>
 	</div>
+
 
 	<div class="main_wrap clearfix">
 		<div class="l_wrap fl clearfix">
@@ -131,5 +132,29 @@
             url="/Buyer/pay/?good_id="+{{ goods.id }}+"&goods_count="+$("#number").val()
             window.location.href=url
         })
+
+            function get_cart(obj) {
+                goods_id=obj.id
+                count = $("#number").val()
+                url='/Buyer/add_cart/'
+                send_data={
+                    "goods_id":goods_id,
+                    "goods_number":count,
+                    "csrfmiddlewaretoken":"{{ csrf_token }}"
+                }
+                $.ajax(
+                    {
+                        url:url,
+                        type:'post',
+                        data:send_data,
+                        success:function (data) {
+                            console.log(data)
+                        },
+                        error:function (error) {
+                            console.log(error)
+                        }
+                    }
+            )
+        }
     </script>
 {% endblock %}
